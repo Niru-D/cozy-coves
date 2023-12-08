@@ -3,17 +3,17 @@ import ReactDOM from 'react-dom';
 import App from './App.jsx';
 import { AuthProvider } from '@asgardeo/auth-react';
 
+const authConfig = {
+  signInRedirectURL: window.config.redirectUrl,
+  signOutRedirectURL: window.config.redirectUrl,
+  clientID: window.config.asgardeoClientId,
+  baseUrl: window.config.asgardeoBaseUrl,
+  scope: ["openid", "profile"],
+};
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <AuthProvider
-      config={{
-        signInRedirectURL: 'http://localhost:3000',
-        signOutRedirectURL: 'http://localhost:3000',
-        clientID: 'arCa9s8pb1rw6xw54SIst6IiRRUa',
-        baseUrl: 'https://api.asgardeo.io/t/cozycoves',
-        scope: ['openid', 'profile'],
-      }}
-    >
+    <AuthProvider config = {authConfig}>
       <App />
     </AuthProvider>
   </React.StrictMode>
