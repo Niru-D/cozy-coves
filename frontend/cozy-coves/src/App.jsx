@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div className="App">
-      <p>Hello User</p>
+      <p>Hello Fellow User</p>
       {state.isAuthenticated ? (
         <div>
           <ul>
