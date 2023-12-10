@@ -4,7 +4,7 @@ import { useAuthContext } from '@asgardeo/auth-react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-// import home1 from 'src/assets/home1.jpg';
+// import home1 from 'src\assets\home1.jpg';
 import home2 from '../../assets/home2.jpg';
 // import home3 from 'src/assets/home3.jpg';
 
@@ -26,7 +26,7 @@ const Home = () => {
     <div className="home">
       <Slider {...settings}>
         <div>
-          <img src="src\assets\home1.jpg" alt="Slide 1" />
+          <img src="src/assets/home1.jpg" alt="Slide 1" />
         </div>
         <div>
           <img src={home2} alt="Slide 2" />
