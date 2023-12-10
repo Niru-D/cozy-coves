@@ -4,6 +4,9 @@ import { useAuthContext } from '@asgardeo/auth-react';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import home1 from 'src\assets\home1.jpg';
+import home2 from '../../assets/home2.jpg';
+import home3 from 'src/assets/home1.jpg';
 
 const Home = () => {
   const { state, signIn, signOut } = useAuthContext();
@@ -23,13 +26,13 @@ const Home = () => {
     <div className="home">
       <Slider {...settings}>
         <div>
-          <img src="src\assets\home1.jpg" alt="Slide 1" />
+          <img src={home1} alt="Slide 1" />
         </div>
         <div>
-          <img src="src\assets\home2.jpg" alt="Slide 2" />
+          <img src={home2} alt="Slide 2" />
         </div>
         <div>
-          <img src="src\assets\home3.jpg" alt="Slide 3" />
+          <img src={home3} alt="Slide 3" />
         </div>
         <div>
           <img src="src\assets\home4.jpg" alt="Slide 4" />
