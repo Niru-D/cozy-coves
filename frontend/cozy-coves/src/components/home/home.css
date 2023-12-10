@@ -1,0 +1,65 @@
+/* Styles for the home section */
+.home {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .slick-slider {
+    width: 100%;
+    height: 100%; 
+  }
+  
+  .slick-slide img {
+    width: 100%;
+    height: 100vh; 
+    object-fit: cover; 
+  }
+  
+  /* Login section styles */
+  .login-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 50px 70px;
+  }
+  
+  .login-btn {
+    padding: 10px 70px;
+    font-size: 20px;
+    margin-top: 40px;
+    /* border: 2px solid var(--light-color);  */
+    border: 2px solid var(--black-color); 
+    border-radius: 10px;
+    background-color: transparent; 
+    /* color: var(--light-color);  */
+    color: var(--black-color); 
+    transition: all 0.3s ease;
+    font-weight:700;
+}
+
+.login-btn:hover {
+    color: var(--primary-color); 
+    background-color: var(--black-color);
+}
+
+  
+  .main-text {
+    font-size: 40px;
+    color: var(--black-color);
+    /* color: var(--light-color); */
+  }
+
+  .sub-text{
+    font-size: 50px;
+    margin-top: 10px;
+    /* color:var(--light-color); */
+    color:var(--black-color);
+    font-family: 'Tangerine', cursive;
+    font-weight: 500;
+  }
+  

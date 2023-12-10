@@ -1,23 +1,15 @@
 import React from 'react';
 import './App.css';
-import { useAuthContext } from '@asgardeo/auth-react';
+import Header from './components/header/Header';
+import Home from './components/home/Home';
 
 function App() {
-  const { state, signIn, signOut } = useAuthContext();
 
   return (
     <div className="App">
-      <p>Welcome!</p>
-      {state.isAuthenticated ? (
-        <div>
-          <ul>
-            <li>{state.username}</li>
-          </ul>
-          <button onClick={() => signOut()}>Logout</button>
-        </div>
-      ) : (
-        <button onClick={() => signIn()}>Login</button>
-      )}
+      <Header />
+      <Home />
+      
     </div>
   );
 }
