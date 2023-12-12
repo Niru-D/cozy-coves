@@ -1,0 +1,124 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'CozyCoves API'
+paths:
+  /api/v1/houses:
+    get:
+      summary: 'Get all houses'
+      responses:
+        '200':
+          description: 'OK'
+        default:
+          description: 'Unexpected error'
+        '400':
+          description: 'Bad Request'
+    post:
+      summary: 'Create a new house'
+      parameters:
+        - in: 'body'
+          name: 'house'
+          schema:
+            $ref: '#/definitions/House'
+      responses:
+        '201':
+          description: 'Created'
+        default:
+          description: 'Unexpected error'
+        '400':
+          description: 'Bad Request'
+    delete:
+      summary: 'Delete a house'
+      parameters:
+        - in: 'path'
+          name: 'houseNo'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'OK'
+        default:
+          description: 'Unexpected error'
+        '404':
+          description: 'Not Found'
+  /api/v1/houses/{house_no}:
+    get:
+      summary: 'Get a house by house number'
+      parameters:
+        - in: 'path'
+          name: 'house_no'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'OK'
+        default:
+          description: 'Unexpected error'
+        '400':
+          description: 'Bad Request'
+  /api/v1/houses/byState/{state}:
+    get:
+      summary: 'Get houses by state'
+      parameters:
+        - in: 'path'
+          name: 'state'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'OK'
+        default:
+          description: 'Unexpected error'
+        '400':
+          description: 'Bad Request'
+  /api/v1/houses/byOwner/{username}:
+    get:
+      summary: 'Get houses by owner'
+      parameters:
+        - in: 'path'
+          name: 'username'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'OK'
+        default:
+          description: 'Unexpected error'
+        '400':
+          description: 'Bad Request'
+openapi:
+components:
+definitions:
+  House:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+      houseNo:
+        type: 'string'
+      price:
+        type: 'integer'
+        format: 'int64'
+      state:
+        type: 'string'
+      no_of_rooms:
+        type: 'integer'
+        format: 'int32'
+      no_of_bathrooms:
+        type: 'integer'
+        format: 'int32'
+      address:
+        type: 'array'
+        items:
+          type: 'string'
+      owner:
+        $ref: '#/definitions/User'
+      renter:
+        $ref: '#/definitions/User'
+  User:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+      username:
+        type: 'string'
