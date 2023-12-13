@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/houses")
+@RequestMapping("/houses")
 public class HouseController {
 
     @Autowired

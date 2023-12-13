@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/api/v1/requests/create": {
+    "/requests/create": {
       "post": {
         "tags": [
           "request-controller"
@@ -44,7 +44,7 @@
         }
       }
     },
-    "/api/v1/houses/create": {
+    "/houses/create": {
       "post": {
         "tags": [
           "house-controller"
@@ -74,7 +74,7 @@
         }
       }
     },
-    "/api/v1/houses": {
+    "/houses": {
       "get": {
         "tags": [
           "house-controller"
@@ -97,7 +97,7 @@
         }
       }
     },
-    "/api/v1/houses/{house_no}": {
+    "/houses/{house_no}": {
       "get": {
         "tags": [
           "house-controller"
@@ -127,7 +127,7 @@
         }
       }
     },
-    "/api/v1/houses/byState/{state}": {
+    "/houses/byState/{state}": {
       "get": {
         "tags": [
           "house-controller"
@@ -157,7 +157,7 @@
         }
       }
     },
-    "/api/v1/houses/byOwner/{username}": {
+    "/houses/byOwner/{username}": {
       "get": {
         "tags": [
           "house-controller"
@@ -187,7 +187,7 @@
         }
       }
     },
-    "/api/v1/houses/delete/{houseNo}": {
+    "/houses/delete/{houseNo}": {
       "delete": {
         "tags": [
           "house-controller"
