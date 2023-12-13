@@ -60,11 +60,8 @@ const Home = () => {
         <p className='main-text'>Home&nbsp;is&nbsp;where&nbsp;your&nbsp;story&nbsp;begins. </p>
         <p className='sub-text'>Start yours with us.</p>
         {state.isAuthenticated ? (
-          <div className="logout-btn">
-            <ul>
-              <li>{state.username}</li>
-            </ul>
-            <button onClick={() => signOut()}>Logout</button>
+          <div className="welcome-section">
+            <p>Welcome {state.username}</p>
           </div>
         ) : (
           <button className="login-btn" onClick={() => signIn()}>
