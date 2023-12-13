@@ -5,5 +5,5 @@ endpoints:
     port: 8080
     type: REST
     networkVisibility: Public
-    context: /api/v1/houses
+    context: /
     schemaFilePath: openapi.json
