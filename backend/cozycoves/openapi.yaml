@@ -2,6 +2,11 @@ swagger: '2.0'
 info:
   version: '1.0.0'
   title: 'CozyCoves API'
+externalDocs:
+  description: Choreo
+  url: https://choreo.dev
+servers:
+  - url: http://localhost:8080
 paths:
   /api/v1/houses:
     get:
