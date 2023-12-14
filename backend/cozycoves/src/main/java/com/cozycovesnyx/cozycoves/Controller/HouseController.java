@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/houses")
@@ -21,8 +23,8 @@ public class HouseController {
     private HouseService houseService;
 
     @GetMapping
-    public ResponseEntity<List<House>> getAllHouses() {
-        List<House> houses = houseService.allHouses();
+    public ResponseEntity<Optional<List<House>>> getAllHouses() {
+        Optional<List<House>> houses = houseService.allHouses();
         if (houses != null && !houses.isEmpty()) {
             return new ResponseEntity<>(houses, HttpStatus.OK);
         } else {
@@ -68,7 +70,6 @@ public class HouseController {
 
         return ResponseEntity.ok(filteredHouses);
     }
-//    curl -X GET 'http://your-api-url/search?maxPrice=5000&rooms=2&bathrooms=1'
 
 
     @PostMapping("/create")

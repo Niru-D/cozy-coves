@@ -24,8 +24,8 @@ public class HouseService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<House> allHouses(){
-        return houseRepository.findAll();
+    public Optional<List<House>> allHouses(){
+        return Optional.of(houseRepository.findAll());
     }
 
     public Optional<House> singleHouse(String house_no){

@@ -1,5 +1,6 @@
 package com.cozycovesnyx.cozycoves.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,12 +33,15 @@ public class House {
 
     private List<String> address;
 
+    @JsonIgnore
     @DBRef
     private User owner;
 
+    @JsonIgnore
     @DBRef
     private User renter;
 
+    @JsonIgnore
     @DBRef
     private List<Request> requests;
 
