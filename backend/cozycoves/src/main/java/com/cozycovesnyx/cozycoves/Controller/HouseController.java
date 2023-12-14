@@ -50,6 +50,27 @@ public class HouseController {
                 .orElse(ResponseEntity.badRequest().build());
     }
 
+    @GetMapping("/byRenter/{username}")
+    public ResponseEntity<?> getHousesByRenter(@PathVariable String username) {
+        Optional<List<House>> houses = houseService.findHousesByRenterUsername(username);
+        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
+                .orElse(ResponseEntity.badRequest().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchHouses(
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Long maxPrice,
+            @RequestParam(required = false) Integer rooms,
+            @RequestParam(required = false) Integer bathrooms
+    ) {
+        Optional<List<House>> filteredHouses = houseService.searchHouses(location, maxPrice, rooms, bathrooms);
+
+        return ResponseEntity.ok(filteredHouses);
+    }
+//    curl -X GET 'http://your-api-url/search?maxPrice=5000&rooms=2&bathrooms=1'
+
+
     @PostMapping("/create")
     public ResponseEntity<House> createHouse(@RequestBody House house) {
         House createdHouse = houseService.createHouse(house);
@@ -67,6 +88,16 @@ public class HouseController {
                 ? new ResponseEntity<>("House with houseNo: " + houseNo + " deleted", HttpStatus.OK)
                 : new ResponseEntity<>("House with houseNo: " + houseNo + " not found", HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/update/{houseNo}")
+    public ResponseEntity<?> updateHouse(@PathVariable String houseNo, @RequestBody House updatedHouse) {
+        boolean updated = houseService.updateHouse(houseNo, updatedHouse);
+        return updated
+                ? new ResponseEntity<>("House with houseNo: " + houseNo + " updated", HttpStatus.OK)
+                : new ResponseEntity<>("House with houseNo: " + houseNo + " not found", HttpStatus.NOT_FOUND);
+    }
+
+
 
 
 }

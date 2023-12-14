@@ -11,6 +11,84 @@
     }
   ],
   "paths": {
+    "/requests/update/{requestNo}": {
+      "put": {
+        "tags": [
+          "request-controller"
+        ],
+        "operationId": "updateRequest",
+        "parameters": [
+          {
+            "name": "requestNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/houses/update/{houseNo}": {
+      "put": {
+        "tags": [
+          "house-controller"
+        ],
+        "operationId": "updateHouse",
+        "parameters": [
+          {
+            "name": "houseNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/House"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/requests/create": {
       "post": {
         "tags": [
@@ -74,6 +152,66 @@
         }
       }
     },
+    "/requests/byRenter/{username}": {
+      "get": {
+        "tags": [
+          "request-controller"
+        ],
+        "operationId": "getRequestsByRenter",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/byHouse/{houseNo}": {
+      "get": {
+        "tags": [
+          "request-controller"
+        ],
+        "operationId": "getRequestsByHouse",
+        "parameters": [
+          {
+            "name": "houseNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/houses": {
       "get": {
         "tags": [
@@ -127,6 +265,63 @@
         }
       }
     },
+    "/houses/search": {
+      "get": {
+        "tags": [
+          "house-controller"
+        ],
+        "operationId": "searchHouses",
+        "parameters": [
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "rooms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "bathrooms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/houses/byState/{state}": {
       "get": {
         "tags": [
@@ -157,6 +352,36 @@
         }
       }
     },
+    "/houses/byRenter/{username}": {
+      "get": {
+        "tags": [
+          "house-controller"
+        ],
+        "operationId": "getHousesByRenter",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/houses/byOwner/{username}": {
       "get": {
         "tags": [
@@ -166,6 +391,36 @@
         "parameters": [
           {
             "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/delete/{requestNo}": {
+      "delete": {
+        "tags": [
+          "request-controller"
+        ],
+        "operationId": "deleteRequest",
+        "parameters": [
+          {
+            "name": "requestNo",
             "in": "path",
             "required": true,
             "schema": {
@@ -224,7 +479,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/ObjectId"
+            "type": "object"
           },
           "houseNo": {
             "type": "string"
@@ -256,6 +511,12 @@
           "renter": {
             "$ref": "#/components/schemas/User"
           },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Request"
+            }
+          },
           "idAsString": {
             "type": "string"
           }
@@ -271,6 +532,26 @@
           "date": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "Request": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ObjectId"
+          },
+          "requestNo": {
+            "type": "string"
+          },
+          "house": {
+            "$ref": "#/components/schemas/House"
+          },
+          "requestedRenter": {
+            "$ref": "#/components/schemas/User"
+          },
+          "status": {
+            "type": "string"
           }
         }
       },

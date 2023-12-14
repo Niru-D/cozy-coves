@@ -17,6 +17,8 @@ public class Request {
     @Id
     private ObjectId id;
 
+    private String requestNo;
+
     @DBRef
     private House house;
 
@@ -25,9 +27,22 @@ public class Request {
 
     private String status;
 
-    public Request(House house, User requestedRenter, String status) {
+    public Request(String requestNo, House house, User requestedRenter, String status) {
+        this.requestNo = requestNo;
         this.house = house;
         this.requestedRenter = requestedRenter;
         this.status = status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public House getHouse() {
+        return house;
+    }
+
+    public User getRequestedRenter() {
+        return requestedRenter;
     }
 }

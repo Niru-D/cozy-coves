@@ -38,6 +38,9 @@ public class House {
     @DBRef
     private User renter;
 
+    @DBRef
+    private List<Request> requests;
+
 
     public void setPrice(Long price) {
         this.price = price;
@@ -85,5 +88,13 @@ public class House {
 
     public void setHouseNo(String houseNo) {
         this.houseNo = houseNo;
+    }
+
+    public Object getId() {
+        return id;
+    }
+
+    public void setRenter(User renter) {
+        this.renter = renter;
     }
 }
