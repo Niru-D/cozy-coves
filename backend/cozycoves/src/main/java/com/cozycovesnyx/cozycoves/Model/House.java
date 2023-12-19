@@ -23,6 +23,8 @@ public class House {
 
     private String houseNo;
 
+    private String description;
+
     private Long price;
 
     private String state;

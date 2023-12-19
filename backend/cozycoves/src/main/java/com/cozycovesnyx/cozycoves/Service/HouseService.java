@@ -39,6 +39,9 @@ public class HouseService {
     public Optional<List<House>> searchHouses(String location, Long maxPrice, Integer rooms, Integer bathrooms){
 
         Criteria criteria = new Criteria().and("state").is("AVAILABLE");
+//        state should be a search value-------------------------------
+
+
 
         if (location != null) {
             criteria = criteria.and("address").elemMatch(Criteria.where("$regex").regex(location, "i"));
