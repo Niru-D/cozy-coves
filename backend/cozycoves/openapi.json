@@ -484,6 +484,9 @@
           "houseNo": {
             "type": "string"
           },
+          "description": {
+            "type": "string"
+          },
           "price": {
             "type": "integer",
             "format": "int64"
@@ -505,63 +508,7 @@
               "type": "string"
             }
           },
-          "owner": {
-            "$ref": "#/components/schemas/User"
-          },
-          "renter": {
-            "$ref": "#/components/schemas/User"
-          },
-          "requests": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Request"
-            }
-          },
           "idAsString": {
-            "type": "string"
-          }
-        }
-      },
-      "ObjectId": {
-        "type": "object",
-        "properties": {
-          "timestamp": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "date": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "Request": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/ObjectId"
-          },
-          "requestNo": {
-            "type": "string"
-          },
-          "house": {
-            "$ref": "#/components/schemas/House"
-          },
-          "requestedRenter": {
-            "$ref": "#/components/schemas/User"
-          },
-          "status": {
-            "type": "string"
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "object"
-          },
-          "username": {
             "type": "string"
           }
         }
