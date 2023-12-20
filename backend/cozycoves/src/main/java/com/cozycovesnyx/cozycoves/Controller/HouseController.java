@@ -32,41 +32,45 @@ public class HouseController {
         }
     }
 
-    @GetMapping("/{house_no}")
-    public ResponseEntity<?> getAHouse(@PathVariable String house_no) {
-        Optional<House> house = houseService.singleHouse(house_no);
-        return house.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
-    }
+//    @GetMapping("/{house_no}")
+//    public ResponseEntity<?> getAHouse(@PathVariable String house_no) {
+//        Optional<House> house = houseService.singleHouse(house_no);
+//        return house.map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
+//    }
 
-    @GetMapping("/byState/{state}")
-    public ResponseEntity<?> getHousesByState(@PathVariable String state) {
-        Optional<List<House>> houses = houseService.housesByState(state);
-        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-                .orElse(ResponseEntity.badRequest().build());
-    }
+//    @GetMapping("/byState/{state}")
+//    public ResponseEntity<?> getHousesByState(@PathVariable String state) {
+//        Optional<List<House>> houses = houseService.housesByState(state);
+//        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
+//                .orElse(ResponseEntity.badRequest().build());
+//    }
 
-    @GetMapping("/byOwner/{username}")
-    public ResponseEntity<?> getHousesByOwner(@PathVariable String username) {
-        Optional<List<House>> houses = houseService.findHousesByOwnerUsername(username);
-        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-                .orElse(ResponseEntity.badRequest().build());
-    }
+//    @GetMapping("/byOwner/{username}")
+//    public ResponseEntity<?> getHousesByOwner(@PathVariable String username) {
+//        Optional<List<House>> houses = houseService.findHousesByOwnerUsername(username);
+//        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
+//                .orElse(ResponseEntity.badRequest().build());
+//    }
 
-    @GetMapping("/byRenter/{username}")
-    public ResponseEntity<?> getHousesByRenter(@PathVariable String username) {
-        Optional<List<House>> houses = houseService.findHousesByRenterUsername(username);
-        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-                .orElse(ResponseEntity.badRequest().build());
-    }
+//    @GetMapping("/byRenter/{username}")
+//    public ResponseEntity<?> getHousesByRenter(@PathVariable String username) {
+//        Optional<List<House>> houses = houseService.findHousesByRenterUsername(username);
+//        return houses.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
+//                .orElse(ResponseEntity.badRequest().build());
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<?> searchHouses(
+            @RequestParam(required = false) String houseNo,
+            @RequestParam(required = false) String state,
             @RequestParam(required = false) String location,
             @RequestParam(required = false) Long maxPrice,
             @RequestParam(required = false) Integer rooms,
-            @RequestParam(required = false) Integer bathrooms
+            @RequestParam(required = false) Integer bathrooms,
+            @RequestParam(required = false) String ownerUsername,
+            @RequestParam(required = false) String renterUsername
     ) {
-        Optional<List<House>> filteredHouses = houseService.searchHouses(location, maxPrice, rooms, bathrooms);
+        Optional<List<House>> filteredHouses = houseService.searchHouses(houseNo, state, location, maxPrice, rooms, bathrooms, ownerUsername, renterUsername);
 
         return ResponseEntity.ok(filteredHouses);
     }

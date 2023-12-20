@@ -103,4 +103,12 @@ public class House {
     public void setRenter(User renter) {
         this.renter = renter;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

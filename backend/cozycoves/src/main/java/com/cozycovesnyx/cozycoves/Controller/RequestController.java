@@ -32,6 +32,20 @@ public class RequestController {
         return response;
     }
 
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createRequest(
+//            @RequestParam(required = false) String houseNo,
+//            @RequestParam(required = false) String username
+//    ) throws Exception {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        House house = objectMapper.convertValue(payload.get("house"), House.class);
+//        User requestedRenter = objectMapper.convertValue(payload.get("requestedRenter"), User.class);
+//
+//        ResponseEntity<?> response = requestService.createRequest(house, requestedRenter);
+//
+//        return response;
+//    }
+
     @GetMapping("/byRenter/{username}")
     public ResponseEntity<?> getRequestsByRenter(@PathVariable String username) {
         Optional<List<Request>> requests = requestService.findRequestsByRenterUsername(username);

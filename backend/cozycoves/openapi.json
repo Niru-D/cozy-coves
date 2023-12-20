@@ -235,36 +235,6 @@
         }
       }
     },
-    "/houses/{house_no}": {
-      "get": {
-        "tags": [
-          "house-controller"
-        ],
-        "operationId": "getAHouse",
-        "parameters": [
-          {
-            "name": "house_no",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/houses/search": {
       "get": {
         "tags": [
@@ -272,6 +242,22 @@
         ],
         "operationId": "searchHouses",
         "parameters": [
+          {
+            "name": "houseNo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "location",
             "in": "query",
@@ -306,93 +292,19 @@
               "type": "integer",
               "format": "int32"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/houses/byState/{state}": {
-      "get": {
-        "tags": [
-          "house-controller"
-        ],
-        "operationId": "getHousesByState",
-        "parameters": [
+          },
           {
-            "name": "state",
-            "in": "path",
-            "required": true,
+            "name": "ownerUsername",
+            "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/houses/byRenter/{username}": {
-      "get": {
-        "tags": [
-          "house-controller"
-        ],
-        "operationId": "getHousesByRenter",
-        "parameters": [
+          },
           {
-            "name": "username",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/houses/byOwner/{username}": {
-      "get": {
-        "tags": [
-          "house-controller"
-        ],
-        "operationId": "getHousesByOwner",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "required": true,
+            "name": "renterUsername",
+            "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }

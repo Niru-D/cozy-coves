@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class HouseService {
@@ -28,35 +29,47 @@ public class HouseService {
         return Optional.of(houseRepository.findAll());
     }
 
-    public Optional<House> singleHouse(String house_no){
-        return houseRepository.findAHouseByHouseNo(house_no);
-    }
+//    public Optional<House> singleHouse(String house_no){
+//        return houseRepository.findAHouseByHouseNo(house_no);
+//    }
 
-    public Optional<List<House>> housesByState(String state){
-        return houseRepository.findHousesByState(state);
-    }
+//    public Optional<List<House>> housesByState(String state){
+//        return houseRepository.findHousesByState(state);
+//    }
 
-    public Optional<List<House>> searchHouses(String location, Long maxPrice, Integer rooms, Integer bathrooms){
+    public Optional<List<House>> searchHouses(String houseNo, String state, String location, Long maxPrice, Integer rooms, Integer bathrooms, String ownerUsername, String renterUsername){
 
-        Criteria criteria = new Criteria().and("state").is("AVAILABLE");
-//        state should be a search value-------------------------------
+        final Criteria[] criteria = {new Criteria()};
 
+        if (houseNo != null) {
+            criteria[0] = criteria[0].and("houseNo").is(houseNo);
+        }
 
+        if (state != null) {
+            criteria[0] = criteria[0].and("state").regex("^" + state + "$", "i");
+        }
 
         if (location != null) {
-            criteria = criteria.and("address").elemMatch(Criteria.where("$regex").regex(location, "i"));
+            criteria[0] = criteria[0].and("address").elemMatch(Criteria.where("$regex").regex(location, "i"));
         }
         if (maxPrice != null) {
-            criteria = criteria.and("price").lte(maxPrice);
+            criteria[0] = criteria[0].and("price").lte(maxPrice);
         }
         if (rooms != null) {
-            criteria = criteria.and("no_of_rooms").is(rooms);
+            criteria[0] = criteria[0].and("no_of_rooms").is(rooms);
         }
         if (bathrooms != null) {
-            criteria = criteria.and("no_of_bathrooms").is(bathrooms);
+            criteria[0] = criteria[0].and("no_of_bathrooms").is(bathrooms);
+        }
+        if (ownerUsername != null) {
+            Optional<List<House>> ownerHouses = findHousesByOwnerUsername(ownerUsername);
+            ownerHouses.ifPresent(houses -> {
+                criteria[0] = criteria[0].andOperator(Criteria.where("id").in(houses.stream().map(House::getId).collect(Collectors.toList())));
+            });
         }
 
-        Query query = new Query(criteria);
+
+        Query query = new Query(criteria[0]);
         return Optional.of(mongoTemplate.find(query, House.class));
     }
 
@@ -73,18 +86,32 @@ public class HouseService {
         return Optional.empty();
     }
 
-    public Optional<List<House>> findHousesByRenterUsername(String username) {
-        Query userQuery = new Query(Criteria.where("username").is(username));
-        User user = mongoTemplate.findOne(userQuery, User.class);
 
-        if (user != null) {
-            Query houseQuery = new Query(Criteria.where("renter").is(user.getId()));
-            List<House> houses = mongoTemplate.find(houseQuery, House.class);
-            return Optional.ofNullable(houses.isEmpty() ? null : houses);
-        }
+//    public Optional<List<House>> findHousesByOwnerUsername(String username) {
+//        Query userQuery = new Query(Criteria.where("username").is(username));
+//        User user = mongoTemplate.findOne(userQuery, User.class);
+//
+//        if (user != null) {
+//            Query houseQuery = new Query(Criteria.where("owner").is(user.getId()));
+//            List<House> houses = mongoTemplate.find(houseQuery, House.class);
+//            return Optional.ofNullable(houses.isEmpty() ? null : houses);
+//        }
+//
+//        return Optional.empty();
+//    }
 
-        return Optional.empty();
-    }
+//    public Optional<List<House>> findHousesByRenterUsername(String username) {
+//        Query userQuery = new Query(Criteria.where("username").is(username));
+//        User user = mongoTemplate.findOne(userQuery, User.class);
+//
+//        if (user != null) {
+//            Query houseQuery = new Query(Criteria.where("renter").is(user.getId()));
+//            List<House> houses = mongoTemplate.find(houseQuery, House.class);
+//            return Optional.ofNullable(houses.isEmpty() ? null : houses);
+//        }
+//
+//        return Optional.empty();
+//    }
 
 
     public House createHouse(House house) {
@@ -97,17 +124,31 @@ public class HouseService {
         if (existingHouse.isPresent()) {
             House currentHouse = existingHouse.get();
 
-            currentHouse.setPrice(updatedHouse.getPrice());
-            currentHouse.setState(updatedHouse.getState());
-            currentHouse.setNo_of_rooms(updatedHouse.getNo_of_rooms());
-            currentHouse.setNo_of_bathrooms(updatedHouse.getNo_of_bathrooms());
-            currentHouse.setAddress(updatedHouse.getAddress());
+            if (updatedHouse.getDescription() != null) {
+                currentHouse.setDescription(updatedHouse.getDescription());
+            }
+            if (updatedHouse.getPrice() != null) {
+                currentHouse.setPrice(updatedHouse.getPrice());
+            }
+            if (updatedHouse.getState() != null) {
+                currentHouse.setState(updatedHouse.getState());
+            }
+            if (updatedHouse.getNo_of_rooms() != -1) {
+                currentHouse.setNo_of_rooms(updatedHouse.getNo_of_rooms());
+            }
+            if (updatedHouse.getNo_of_bathrooms() != -1) {
+                currentHouse.setNo_of_bathrooms(updatedHouse.getNo_of_bathrooms());
+            }
+            if (updatedHouse.getAddress() != null) {
+                currentHouse.setAddress(updatedHouse.getAddress());
+            }
 
             houseRepository.save(currentHouse);
             return true;
         }
         return false;
     }
+
 
 
 
