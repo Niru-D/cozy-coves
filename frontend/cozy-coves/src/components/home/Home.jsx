@@ -56,6 +56,7 @@ const Home = () => {
         </div>
         
       </Slider>
+      
       <div className="login-section">
         <p className='main-text'>Home&nbsp;is&nbsp;where&nbsp;your&nbsp;story&nbsp;begins. </p>
         <p className='sub-text'>Start yours with us.</p>

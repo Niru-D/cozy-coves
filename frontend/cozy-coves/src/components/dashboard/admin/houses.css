@@ -1,0 +1,70 @@
+ul li{
+    font-size: 13px;
+    color: rgb(73, 73, 73);
+}
+
+ul{
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 0 10px;
+    list-style-type: none;
+}
+
+.house-state{
+    font-size: 14px;
+    color:rgb(73, 73, 73);
+    padding-left: 10px;
+    font-style: italic;
+}
+
+.house-section{
+    overflow-y:auto;
+    margin-bottom: 100px;
+}
+
+.filter-icon{
+    position: absolute;
+    right: 30px;
+    font-size: 18px;
+}
+
+.filter-icon:hover{
+    cursor: pointer;
+}
+
+.drawer-header{
+    margin-bottom: 45px;
+    font-size: 16px !important;
+}
+
+.form-label{
+    font-size: 14px !important;
+    margin-top: 15px;
+    margin-bottom: 0 !important;
+    color: var(--primary-color);
+}
+
+.inputs{
+    font-size: 14px !important;
+}
+
+.apply-btn{
+    background-color: var(--primary-color) !important;
+    color: var(--white-color) !important;
+}
+
+.tag{
+    background-color: var(--secondary-color) !important;
+    margin-bottom: 10px;
+    right: 60px;
+    top: 53px;
+    position:absolute;
+}
+
+.filter-section{
+    height: 33px;
+}
+
+  
+  

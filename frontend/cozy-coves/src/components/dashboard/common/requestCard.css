@@ -1,0 +1,23 @@
+.address {
+    font-size: 14px;
+    color: rgb(87, 86, 86);
+    margin-top: 5px;
+}
+
+.telephone{
+    font-size: 14px;
+    color: rgb(73, 73, 73);
+    margin-top: 5px;
+}
+
+.owner-name{
+    font-size: 14px;
+}
+
+.request-icon{
+    color: var(--accent-color) !important;
+}
+
+.request-heading{
+    color: var(--accent-color) !important;
+}

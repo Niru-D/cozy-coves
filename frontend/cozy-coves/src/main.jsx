@@ -8,7 +8,7 @@ const authConfig = {
   signOutRedirectURL: window.config.redirectUrl,
   clientID: window.config.asgardeoClientId,
   baseUrl: window.config.asgardeoBaseUrl,
-  scope: ["openid", "profile"],
+  scope: ["openid", "profile","address", "app_roles", "email", "groups", "phone" ]
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(

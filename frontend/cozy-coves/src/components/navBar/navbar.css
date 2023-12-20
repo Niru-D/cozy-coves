@@ -1,0 +1,40 @@
+/* navbar.css */
+
+.nav-bar {
+    width: 5%;
+    background-color: var(--primary-color);
+    height: 100%;
+    z-index: 20;
+    position: absolute;
+    display: flex;
+    align-items: center;
+  }
+  
+  .icon-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .icon-list li {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    justify-content: center;
+    display: flex;
+    cursor: pointer;
+  }
+  
+  .nav-icon {
+    color: white;
+    font-size: 30px;
+    height: 70px;
+  }
+  
+  .selected {
+    background-color: #4a7b62;
+  }
+  
