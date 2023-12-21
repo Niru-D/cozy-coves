@@ -1,3 +1,7 @@
+.request-card{
+    margin-bottom: 10px !important;
+}
+
 .address {
     font-size: 14px;
     color: rgb(87, 86, 86);
@@ -20,4 +24,12 @@
 
 .request-heading{
     color: var(--accent-color) !important;
+}
+
+.ACCEPTED{
+    color: green;
+}
+
+.PENDING{
+    color: orange;
 }

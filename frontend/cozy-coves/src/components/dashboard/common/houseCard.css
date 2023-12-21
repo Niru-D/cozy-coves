@@ -1,0 +1,11 @@
+.available{
+    color: green !important;
+}
+
+.suspended{
+    color: red !important;
+}
+
+.rented{
+    color: orange !important;
+}

@@ -24,27 +24,48 @@ const DashboardContentHouses = () => {
   const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure()
 
   const [houses, setHouses] = useState();
+  const [tempHouses, setTempHouses] = useState([]);
+  const [houseStatistics, setHouseStatistics] = useState({
+    total: 0,
+    available: 0,
+    rented: 0,
+  });
 
   const getHouses = async () =>{
     try{
       const response = await api.get("/houses");
       console.log(response.data);
       setHouses(response.data);
+
+      const totalHouses = response.data.length || 0;
+      const availableHouses = response.data.filter(house => house.state === 'AVAILABLE').length || 0;
+      const rentedHouses = response.data.filter(house => house.state === 'RENTED').length || 0;
+      
+      setHouseStatistics({
+        total: totalHouses,
+        available: availableHouses,
+        rented: rentedHouses,
+      });
+
     }catch(err){
       console.log(err);
     }
   }
 
-  useEffect(() => {
-    getHouses();
-  },[])
+  // useEffect(() => {
+  //   getHouses();
+
+  //   const interval = setInterval(getHouses, 500);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const initialFormValues = {
     state: '',
     location: '',
     price: '',
-    rooms: 0,
-    bathrooms: 0,
+    rooms: '',
+    bathrooms: '',
   };
   const [formValues, setFormValues] = useState({ ...initialFormValues });
   const [appliedChanges, setAppliedChanges] = useState(false);
@@ -75,29 +96,81 @@ const DashboardContentHouses = () => {
     return Object.values(formValues).some((value) => typeof value === 'string' && value.trim() !== '');
   };
 
-  const handleFormSubmit = (e) => {
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log('submitted');
+  //   if (!appliedChanges && formChanges) {
+  //     setAppliedChanges(true);
+  //     setShowTag(true);
+  //   }
+  //   onDrawerClose();
+  // };
+
+  const handleCloseTag = () => {
+    setFormValues({ ...initialFormValues });
+    setAppliedChanges(false);
+    setShowTag(false);
+    setTempHouses([]); // Clear temporary array
+  };
+
+  // const handleResetChanges = () => {
+  //   setFormValues({ ...initialFormValues });
+  //   setAppliedChanges(false);
+  //   setShowTag(false);
+  // };
+
+  const handleSearchHouses = async () => {
+    try {
+      const response = await api.get("/houses/search", {
+        params: {
+          state: formValues.state || undefined,
+          location: formValues.location || undefined,
+          maxPrice: formValues.price || undefined,
+          rooms: formValues.rooms || undefined,
+          bathrooms: formValues.bathrooms || undefined,
+        },
+      });
+      console.log(response.data);
+      setTempHouses(response.data || []); // Update temporary array with filtered houses
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getHouses();
+
+    const interval = setInterval(getHouses, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     console.log('submitted');
     if (!appliedChanges && formChanges) {
       setAppliedChanges(true);
       setShowTag(true);
+      await handleSearchHouses(); // Call the search API with form values
+    } else {
+      await getHouses(); // Call the default /houses API
     }
     onDrawerClose();
-  };
-
-  const handleCloseTag = () => {
-    if (appliedChanges) {
-      setFormValues({ ...initialFormValues });
-      setAppliedChanges(false);
-      setShowTag(false);
-    }
   };
 
   const handleResetChanges = () => {
     setFormValues({ ...initialFormValues });
     setAppliedChanges(false);
     setShowTag(false);
+    setTempHouses([]); // Clear temporary array
+    onDrawerClose();
   };
+
+  useEffect(() => {
+    if (appliedChanges && formChanges) {
+      handleSearchHouses();
+    }
+  }, [appliedChanges, formChanges]);
 
 
   return (
@@ -110,8 +183,6 @@ const DashboardContentHouses = () => {
           </TabList>
 
           <TabPanels>
-
-
             <TabPanel>
               <div className="stat-section">
               <SimpleGrid spacing={6} templateColumns='repeat(auto-fill, minmax(400px, 1fr))'>
@@ -119,7 +190,7 @@ const DashboardContentHouses = () => {
                     <CardBody>
                       <Stat>
                         <StatLabel size='lg' color='teal'>All Houses</StatLabel>
-                        <StatNumber size="lg">20</StatNumber>
+                        <StatNumber size="lg">{houseStatistics.total || 0}</StatNumber>
                         <StatHelpText>December 2023</StatHelpText>
                       </Stat>
                     </CardBody>
@@ -128,7 +199,7 @@ const DashboardContentHouses = () => {
                     <CardBody>
                       <Stat>
                         <StatLabel color='green'>Available Houses</StatLabel>
-                        <StatNumber>12</StatNumber>
+                        <StatNumber>{houseStatistics.available || 0}</StatNumber>
                         <StatHelpText>December 2023</StatHelpText>
                       </Stat>
                     </CardBody>
@@ -137,7 +208,7 @@ const DashboardContentHouses = () => {
                     <CardBody>
                       <Stat>
                         <StatLabel color='orange'>Rented Houses</StatLabel>
-                        <StatNumber>8</StatNumber>
+                        <StatNumber>{houseStatistics.rented || 0}</StatNumber>
                         <StatHelpText>December 2023</StatHelpText>
                       </Stat>
                     </CardBody>
@@ -146,8 +217,6 @@ const DashboardContentHouses = () => {
                 </SimpleGrid>
               </div>
             </TabPanel>
-
-
             <TabPanel >
               <div className="filter-section">
                 {appliedChanges && (
@@ -206,7 +275,7 @@ const DashboardContentHouses = () => {
                         name="location"
                       />
 
-                      <FormLabel className='form-label'>Price LKR</FormLabel>
+                      <FormLabel className='form-label'>Maximum Price LKR</FormLabel>
                       <Input
                         type='number'
                         className='inputs'
@@ -278,24 +347,45 @@ const DashboardContentHouses = () => {
                   'scrollbar-width': 'none', 
                 }}
               >
-              <div className='house-section' style={{ overflowY: 'auto' }}>
-                
-                <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(400px, 1fr))'>
-                  
-                {houses && houses.map((house, index) => (
-                <CustomHouseCard
-                  key={index}
-                  description={house.description}
-                  price={house.price}
-                  address={house.address}
-                  rooms={house.no_of_rooms}
-                  bathrooms={house.no_of_bathrooms}
-                  state={house.state}
-                />
-              ))}
-                  
-                </SimpleGrid>
-              </div>
+              
+                {((appliedChanges && tempHouses.length === 0) || (!appliedChanges && houses && houses.length === 0)) ? (
+                  <div className="no-houses">
+                    <Image src="src\assets\housesForSale.svg" alt="No Matching Houses Image" className='no-houses-img' />
+                    <Text className='no-houses-text'>No houses found.</Text>
+                  </div>
+                ) : (
+                <div className='house-section' style={{ overflowY: 'auto' }}>
+                  <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(400px, 1fr))'>
+                      {tempHouses.length > 0 ? (
+                        tempHouses && tempHouses.map((house, index) => (
+                          <CustomHouseCard
+                            key={index}
+                            houseNo={house.houseNo}
+                            description={house.description}
+                            price={house.price}
+                            address={house.address}
+                            rooms={house.no_of_rooms}
+                            bathrooms={house.no_of_bathrooms}
+                            houseState={house.state}
+                          />
+                        ))
+                      ) : (
+                          houses && houses.map((house, index) => (
+                            <CustomHouseCard
+                              key={index}
+                              houseNo={house.houseNo}
+                              description={house.description}
+                              price={house.price}
+                              address={house.address}
+                              rooms={house.no_of_rooms}
+                              bathrooms={house.no_of_bathrooms}
+                              houseState={house.state}
+                            />
+                          ))
+                        )}
+                  </SimpleGrid>
+                </div>
+                )}
               </Box>
             </TabPanel>
           </TabPanels>

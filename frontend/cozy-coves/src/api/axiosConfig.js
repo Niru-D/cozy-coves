@@ -4,6 +4,6 @@ export default axios.create({
     baseURL: window.config.axiosBaseUrl,
     headers: {
         "ngrok-skip-browser-warning":"true",
-        "Access-Control-Allow-Origin": "*",
+        // "Access-Control-Allow-Origin": "*",
     }
 });

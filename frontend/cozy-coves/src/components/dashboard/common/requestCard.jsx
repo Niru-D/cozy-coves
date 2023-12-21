@@ -4,8 +4,9 @@ import { Card, Flex, Icon, Stack, Box, Grid, CardBody, CardFooter, Heading, Text
 import { MdPendingActions } from "react-icons/md";
 
 const RequestCard = ({ address, owner, telephone, status }) => {
+
   return (
-    <Card variant='outline'>
+    <Card variant='outline' className='request-card'>
       <Grid templateColumns={{ base: 'auto', sm: '80px auto auto auto' }} gap={4} alignItems="center">
         <Flex align="center" justify="center">
           <Icon as={MdPendingActions} w={12} h={12} color='teal' className='request-icon' />
@@ -41,7 +42,8 @@ const RequestCard = ({ address, owner, telephone, status }) => {
 
         <Box>
           <CardFooter>
-            <p className='state-label'>Status: <span className='state-value'>{status}</span></p>
+          <p className='state-label'>Status: <span className={`state-value ${status}`}>{status}</span></p>
+
           </CardFooter>
         </Box>
       </Grid>

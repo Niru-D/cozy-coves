@@ -1,3 +1,9 @@
 .tabs-section{
     width: 91%;
 }
+
+.heading-requests{
+    margin-bottom: 30px !important;
+    font-weight: 600;
+    margin-top: 10px;
+}
