@@ -101,7 +101,7 @@
               "schema": {
                 "type": "object",
                 "additionalProperties": {
-                  "type": "object"
+                  "type": "string"
                 }
               }
             }
@@ -152,12 +152,12 @@
         }
       }
     },
-    "/requests/byRenter/{username}": {
+    "/users/{username}": {
       "get": {
         "tags": [
-          "request-controller"
+          "user-controller"
         ],
-        "operationId": "getRequestsByRenter",
+        "operationId": "getAUser",
         "parameters": [
           {
             "name": "username",
@@ -182,17 +182,25 @@
         }
       }
     },
-    "/requests/byHouse/{houseNo}": {
+    "/requests/search": {
       "get": {
         "tags": [
           "request-controller"
         ],
-        "operationId": "getRequestsByHouse",
+        "operationId": "searchRequests",
         "parameters": [
           {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "houseNo",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -391,7 +399,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "object"
+            "$ref": "#/components/schemas/ObjectId"
           },
           "houseNo": {
             "type": "string"
@@ -420,8 +428,35 @@
               "type": "string"
             }
           },
+          "owner": {
+            "$ref": "#/components/schemas/User"
+          },
           "idAsString": {
-            "type": "string"
+            "$ref": "#/components/schemas/ObjectId"
+          }
+        }
+      },
+      "ObjectId": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ObjectId"
+          },
+          "username": {
+            "type": "object"
           }
         }
       }

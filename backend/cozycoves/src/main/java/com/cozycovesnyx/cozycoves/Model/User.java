@@ -19,7 +19,11 @@ public class User {
     private String username;
 
 
-    public Object getId() {
+    public ObjectId getId() {
         return id;
+    }
+
+    public Object getUsername() {
+        return username;
     }
 }

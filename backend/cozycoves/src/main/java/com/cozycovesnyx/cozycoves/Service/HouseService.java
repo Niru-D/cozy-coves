@@ -25,6 +25,22 @@ public class HouseService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+//    public HouseDTO convertToDTO(House house) {
+//        HouseDTO houseDTO = new HouseDTO();
+//        houseDTO.setId(house.getId().toString());
+//        houseDTO.setHouseNo(house.getHouseNo());
+//        houseDTO.setDescription(house.getDescription());
+//        houseDTO.setPrice(house.getPrice());
+//        houseDTO.setState(house.getState());
+//        houseDTO.setNo_of_rooms(house.getNo_of_rooms());
+//        houseDTO.setNo_of_bathrooms(house.getNo_of_bathrooms());
+//        houseDTO.setAddress(house.getAddress());
+//        houseDTO.setOwner(house.getOwner());
+//        // ... set other fields ...
+//
+//        return houseDTO;
+//    }
+
     public Optional<List<House>> allHouses(){
         return Optional.of(houseRepository.findAll());
     }
@@ -67,6 +83,23 @@ public class HouseService {
                 criteria[0] = criteria[0].andOperator(Criteria.where("id").in(houses.stream().map(House::getId).collect(Collectors.toList())));
             });
         }
+//        if (renterUsername != null) {
+//            Optional<List<House>> renterHouses = findHousesByRenterUsername(renterUsername);
+//            renterHouses.ifPresent(houses -> {
+//                criteria[0] = criteria[0].andOperator(Criteria.where("id").in(houses.stream().map(House::getId).collect(Collectors.toList())));
+//            });
+//        }
+        if (renterUsername != null) {
+            Optional<List<House>> renterHouses = findHousesByRenterUsername(renterUsername);
+            renterHouses.ifPresent(houses -> {
+                if (!houses.isEmpty()) {
+                    criteria[0] = criteria[0].andOperator(Criteria.where("id").in(houses.stream().map(House::getId).collect(Collectors.toList())));
+                } else {
+                    // If there are no houses associated with the renter, return an empty list
+                    criteria[0] = criteria[0].andOperator(Criteria.where("id").is("")); // Providing an impossible condition to return empty result
+                }
+            });
+        }
 
 
         Query query = new Query(criteria[0]);
@@ -100,18 +133,18 @@ public class HouseService {
 //        return Optional.empty();
 //    }
 
-//    public Optional<List<House>> findHousesByRenterUsername(String username) {
-//        Query userQuery = new Query(Criteria.where("username").is(username));
-//        User user = mongoTemplate.findOne(userQuery, User.class);
-//
-//        if (user != null) {
-//            Query houseQuery = new Query(Criteria.where("renter").is(user.getId()));
-//            List<House> houses = mongoTemplate.find(houseQuery, House.class);
-//            return Optional.ofNullable(houses.isEmpty() ? null : houses);
-//        }
-//
-//        return Optional.empty();
-//    }
+    public Optional<List<House>> findHousesByRenterUsername(String username) {
+        Query userQuery = new Query(Criteria.where("username").is(username));
+        User user = mongoTemplate.findOne(userQuery, User.class);
+
+        if (user != null) {
+            Query houseQuery = new Query(Criteria.where("renter").is(user.getId()));
+            List<House> houses = mongoTemplate.find(houseQuery, House.class);
+            return Optional.ofNullable(houses.isEmpty() ? null : houses);
+        }
+
+        return Optional.empty();
+    }
 
 
     public House createHouse(House house) {
@@ -161,5 +194,10 @@ public class HouseService {
         return false;
     }
 
+    public House findHouseByHouseNo(String houseNo) {
+        Query query = Query.query(Criteria.where("houseNo").is(houseNo));
+        House house = mongoTemplate.findOne(query, House.class);
+        return house;
+    }
 
 }

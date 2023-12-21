@@ -1,6 +1,8 @@
 package com.cozycovesnyx.cozycoves.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Request {
 
     @Id
@@ -20,11 +23,14 @@ public class Request {
 
     private String requestNo;
 
-    @JsonIgnore
+//    private String houseId;
+//    private String requestedRenterId;
+
+//    @JsonIgnore
     @DBRef
     private House house;
 
-    @JsonIgnore
+//    @JsonIgnore
     @DBRef
     private User requestedRenter;
 
@@ -34,8 +40,13 @@ public class Request {
         this.requestNo = requestNo;
         this.house = house;
         this.requestedRenter = requestedRenter;
+//        this.houseId = houseId;
+//        this.requestedRenterId = requestedRenterId;
         this.status = status;
     }
+
+//    public Request(String string, ObjectId id, ObjectId id1, String pending) {
+//    }
 
     public void setStatus(String status) {
         this.status = status;

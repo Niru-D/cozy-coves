@@ -16,4 +16,5 @@ public interface HouseRepository extends MongoRepository<House, ObjectId> {
     Optional<List<House>> findHousesByState(String state);
     Optional<House> findAHouseByHouseNo(String houseNo);
 
+    Optional<House> findById(String houseId);
 }

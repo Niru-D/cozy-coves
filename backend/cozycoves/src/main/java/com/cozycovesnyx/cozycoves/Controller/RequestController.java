@@ -2,8 +2,13 @@ package com.cozycovesnyx.cozycoves.Controller;
 
 import com.cozycovesnyx.cozycoves.Model.House;
 import com.cozycovesnyx.cozycoves.Model.Request;
+import com.cozycovesnyx.cozycoves.Repository.HouseRepository;
+import com.cozycovesnyx.cozycoves.Repository.UserRepository;
+import com.cozycovesnyx.cozycoves.Service.HouseService;
 import com.cozycovesnyx.cozycoves.Service.RequestService;
 import com.cozycovesnyx.cozycoves.Model.User;
+import com.cozycovesnyx.cozycoves.Service.UserService;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,43 +26,64 @@ public class RequestController {
     @Autowired
     private RequestService requestService;
 
+    @Autowired
+    private HouseService houseService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private HouseRepository houseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/create")
-    public ResponseEntity<?> createRequest(@RequestBody Map<String, Object> payload) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        House house = objectMapper.convertValue(payload.get("house"), House.class);
-        User requestedRenter = objectMapper.convertValue(payload.get("requestedRenter"), User.class);
+    public ResponseEntity<?> createRequest(@RequestBody Map<String, String> payload) {
+        String houseNo = payload.get("houseNo");
+        String requestedRenterUsername = payload.get("requestedRenter");
 
-        ResponseEntity<?> response = requestService.createRequest(house, requestedRenter);
+        House house = houseService.findHouseByHouseNo(houseNo);
+        if (house == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-        return response;
+        // Fetch User object using requestedRenterUsername
+        User requestedRenter = userService.findByUsername(requestedRenterUsername);
+        if (requestedRenter == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        try {
+            ResponseEntity<?> response = requestService.createRequest(house, requestedRenter);
+            return response;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<?> createRequest(
-//            @RequestParam(required = false) String houseNo,
-//            @RequestParam(required = false) String username
-//    ) throws Exception {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        House house = objectMapper.convertValue(payload.get("house"), House.class);
-//        User requestedRenter = objectMapper.convertValue(payload.get("requestedRenter"), User.class);
+//    @GetMapping("/byRenter/{username}")
+//    public ResponseEntity<?> getRequestsByRenter(@PathVariable String username) {
+//        Optional<List<Request>> requests = requestService.findRequestsByRenterUsername(username);
+//        return requests.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
+//                .orElse(ResponseEntity.badRequest().build());
+//    }
 //
-//        ResponseEntity<?> response = requestService.createRequest(house, requestedRenter);
-//
-//        return response;
+//    @GetMapping("/byHouse/{houseNo}")
+//    public ResponseEntity<?> getRequestsByHouse(@PathVariable String houseNo) {
+//        Optional<List<Request>> requests = requestService.findRequestsByHouseNo(houseNo);
+//        return requests.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
+//                .orElse(ResponseEntity.badRequest().build());
 //    }
 
-    @GetMapping("/byRenter/{username}")
-    public ResponseEntity<?> getRequestsByRenter(@PathVariable String username) {
-        Optional<List<Request>> requests = requestService.findRequestsByRenterUsername(username);
-        return requests.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-                .orElse(ResponseEntity.badRequest().build());
-    }
+    @GetMapping("/search")
+    public ResponseEntity<?> searchRequests(
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String houseNo
+    ) {
+        Optional<List<Request>> filteredRequests = requestService.searchRequests(username, houseNo);
 
-    @GetMapping("/byHouse/{houseNo}")
-    public ResponseEntity<?> getRequestsByHouse(@PathVariable String houseNo) {
-        Optional<List<Request>> requests = requestService.findRequestsByHouseNo(houseNo);
-        return requests.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-                .orElse(ResponseEntity.badRequest().build());
+        return ResponseEntity.ok(filteredRequests);
     }
 
     @DeleteMapping("/delete/{requestNo}")

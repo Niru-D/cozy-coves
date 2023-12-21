@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class House {
 
     private List<String> address;
 
-    @JsonIgnore
+//    @JsonIgnore
     @DBRef
     private User owner;
 
@@ -84,9 +83,10 @@ public class House {
         return address;
     }
 
-    public String getIdAsString() {
-        return houseNo;
+    public ObjectId getIdAsString() {
+        return id;
     }
+
 
     public String getState() {
         return state;
@@ -96,12 +96,16 @@ public class House {
         this.houseNo = houseNo;
     }
 
-    public Object getId() {
+    public ObjectId getId() {
         return id;
     }
 
     public void setRenter(User renter) {
         this.renter = renter;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public String getDescription() {
@@ -110,5 +114,13 @@ public class House {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getHouseNo() {
+        return houseNo;
+    }
+
+    public User getOwner() {
+        return owner;
     }
 }
