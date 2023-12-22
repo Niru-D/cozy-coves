@@ -23,6 +23,7 @@
 // });
 
 import axios from 'axios';
+import { useAuthContext } from '@asgardeo/auth-react';
 const { getAccessToken } = useAuthContext();
 
 const axiosInstance = axios.create({
