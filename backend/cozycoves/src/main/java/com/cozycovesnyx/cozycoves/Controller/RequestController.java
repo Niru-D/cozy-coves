@@ -62,20 +62,6 @@ public class RequestController {
         }
     }
 
-//    @GetMapping("/byRenter/{username}")
-//    public ResponseEntity<?> getRequestsByRenter(@PathVariable String username) {
-//        Optional<List<Request>> requests = requestService.findRequestsByRenterUsername(username);
-//        return requests.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-//                .orElse(ResponseEntity.badRequest().build());
-//    }
-//
-//    @GetMapping("/byHouse/{houseNo}")
-//    public ResponseEntity<?> getRequestsByHouse(@PathVariable String houseNo) {
-//        Optional<List<Request>> requests = requestService.findRequestsByHouseNo(houseNo);
-//        return requests.map(list -> list.isEmpty() ? ResponseEntity.badRequest().build() : ResponseEntity.ok(list))
-//                .orElse(ResponseEntity.badRequest().build());
-//    }
-
     @GetMapping("/search")
     public ResponseEntity<?> searchRequests(
             @RequestParam(required = false) String username,

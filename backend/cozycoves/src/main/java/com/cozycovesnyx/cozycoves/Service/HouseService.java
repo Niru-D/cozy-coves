@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import com.cozycovesnyx.cozycoves.Service.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,33 +26,12 @@ public class HouseService {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-//    public HouseDTO convertToDTO(House house) {
-//        HouseDTO houseDTO = new HouseDTO();
-//        houseDTO.setId(house.getId().toString());
-//        houseDTO.setHouseNo(house.getHouseNo());
-//        houseDTO.setDescription(house.getDescription());
-//        houseDTO.setPrice(house.getPrice());
-//        houseDTO.setState(house.getState());
-//        houseDTO.setNo_of_rooms(house.getNo_of_rooms());
-//        houseDTO.setNo_of_bathrooms(house.getNo_of_bathrooms());
-//        houseDTO.setAddress(house.getAddress());
-//        houseDTO.setOwner(house.getOwner());
-//        // ... set other fields ...
-//
-//        return houseDTO;
-//    }
+    @Autowired
+    private UserService userService;
 
     public Optional<List<House>> allHouses(){
         return Optional.of(houseRepository.findAll());
     }
-
-//    public Optional<House> singleHouse(String house_no){
-//        return houseRepository.findAHouseByHouseNo(house_no);
-//    }
-
-//    public Optional<List<House>> housesByState(String state){
-//        return houseRepository.findHousesByState(state);
-//    }
 
     public Optional<List<House>> searchHouses(String houseNo, String state, String location, Long maxPrice, Integer rooms, Integer bathrooms, String ownerUsername, String renterUsername){
 
@@ -83,12 +63,6 @@ public class HouseService {
                 criteria[0] = criteria[0].andOperator(Criteria.where("id").in(houses.stream().map(House::getId).collect(Collectors.toList())));
             });
         }
-//        if (renterUsername != null) {
-//            Optional<List<House>> renterHouses = findHousesByRenterUsername(renterUsername);
-//            renterHouses.ifPresent(houses -> {
-//                criteria[0] = criteria[0].andOperator(Criteria.where("id").in(houses.stream().map(House::getId).collect(Collectors.toList())));
-//            });
-//        }
         if (renterUsername != null) {
             Optional<List<House>> renterHouses = findHousesByRenterUsername(renterUsername);
             renterHouses.ifPresent(houses -> {
@@ -120,19 +94,6 @@ public class HouseService {
     }
 
 
-//    public Optional<List<House>> findHousesByOwnerUsername(String username) {
-//        Query userQuery = new Query(Criteria.where("username").is(username));
-//        User user = mongoTemplate.findOne(userQuery, User.class);
-//
-//        if (user != null) {
-//            Query houseQuery = new Query(Criteria.where("owner").is(user.getId()));
-//            List<House> houses = mongoTemplate.find(houseQuery, House.class);
-//            return Optional.ofNullable(houses.isEmpty() ? null : houses);
-//        }
-//
-//        return Optional.empty();
-//    }
-
     public Optional<List<House>> findHousesByRenterUsername(String username) {
         Query userQuery = new Query(Criteria.where("username").is(username));
         User user = mongoTemplate.findOne(userQuery, User.class);
@@ -147,10 +108,20 @@ public class HouseService {
     }
 
 
-    public House createHouse(House house) {
+//    public House createHouse(House house) {
+//        house.setHouseNo(UUID.randomUUID().toString());
+//        return houseRepository.save(house);
+//    }
+    public House createHouse(House house, String username) throws Exception {
+        User owner = userService.findByUsername(username);
+        if (owner == null) {
+            throw new Exception("User not found with username: " + username);
+        }
+        house.setOwner(owner);
         house.setHouseNo(UUID.randomUUID().toString());
         return houseRepository.save(house);
     }
+
 
     public boolean updateHouse(String houseNo, House updatedHouse) {
         Optional<House> existingHouse = houseRepository.findAHouseByHouseNo(houseNo);

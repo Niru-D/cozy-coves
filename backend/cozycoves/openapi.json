@@ -128,6 +128,16 @@
           "house-controller"
         ],
         "operationId": "createHouse",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -259,7 +269,7 @@
             }
           },
           {
-            "name": "state",
+            "name": "houseState",
             "in": "query",
             "required": false,
             "schema": {
@@ -431,6 +441,12 @@
           "owner": {
             "$ref": "#/components/schemas/User"
           },
+          "requests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Request"
+            }
+          },
           "idAsString": {
             "$ref": "#/components/schemas/ObjectId"
           }
@@ -446,6 +462,26 @@
           "date": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "Request": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/ObjectId"
+          },
+          "requestNo": {
+            "type": "string"
+          },
+          "house": {
+            "$ref": "#/components/schemas/House"
+          },
+          "requestedRenter": {
+            "$ref": "#/components/schemas/User"
+          },
+          "status": {
+            "type": "string"
           }
         }
       },

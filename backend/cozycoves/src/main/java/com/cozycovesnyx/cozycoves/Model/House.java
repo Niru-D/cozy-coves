@@ -42,7 +42,7 @@ public class House {
     @DBRef
     private User renter;
 
-    @JsonIgnore
+//    @JsonIgnore
     @DBRef
     private List<Request> requests;
 

@@ -35,7 +35,7 @@ public class HouseController {
     @GetMapping("/search")
     public ResponseEntity<?> searchHouses(
             @RequestParam(required = false) String houseNo,
-            @RequestParam(required = false) String state,
+            @RequestParam(required = false) String houseState,
             @RequestParam(required = false) String location,
             @RequestParam(required = false) Long maxPrice,
             @RequestParam(required = false) Integer rooms,
@@ -43,21 +43,32 @@ public class HouseController {
             @RequestParam(required = false) String ownerUsername,
             @RequestParam(required = false) String renterUsername
     ) {
-        Optional<List<House>> filteredHouses = houseService.searchHouses(houseNo, state, location, maxPrice, rooms, bathrooms, ownerUsername, renterUsername);
+        Optional<List<House>> filteredHouses = houseService.searchHouses(houseNo, houseState, location, maxPrice, rooms, bathrooms, ownerUsername, renterUsername);
 
         return ResponseEntity.ok(filteredHouses);
     }
 
 
+//    @PostMapping("/create")
+//    public ResponseEntity<House> createHouse(@RequestBody House house) {
+//        House createdHouse = houseService.createHouse(house);
+//        if (createdHouse != null) {
+//            return new ResponseEntity<>(createdHouse, HttpStatus.CREATED);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @PostMapping("/create")
-    public ResponseEntity<House> createHouse(@RequestBody House house) {
-        House createdHouse = houseService.createHouse(house);
+    public ResponseEntity<House> createHouse(@RequestBody House house, @RequestParam String username) throws Exception {
+        House createdHouse = houseService.createHouse(house, username);
         if (createdHouse != null) {
             return new ResponseEntity<>(createdHouse, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 
 //    @PostMapping("/create")
 //    public ResponseEntity<HouseDTO> createHouse(@RequestBody House house) {

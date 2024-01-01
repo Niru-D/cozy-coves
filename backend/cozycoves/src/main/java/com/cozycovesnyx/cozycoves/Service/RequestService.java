@@ -166,14 +166,35 @@ public class RequestService {
 
 
 
+//    public boolean deleteRequest(String requestNo) {
+//        Optional<Request> existingRequest = requestRepository.findARequestByRequestNo(requestNo);
+//        if (existingRequest.isPresent()) {
+//            requestRepository.delete(existingRequest.get());
+//            return true;
+//        }
+//        return false;
+//    }
+
     public boolean deleteRequest(String requestNo) {
         Optional<Request> existingRequest = requestRepository.findARequestByRequestNo(requestNo);
         if (existingRequest.isPresent()) {
+            // Delete the request from the requests collection
             requestRepository.delete(existingRequest.get());
+
+            // Get the house related to the request
+            House house = existingRequest.get().getHouse();
+
+            // Remove the request from the house's requests array
+            mongoTemplate.update(House.class)
+                    .matching(Criteria.where("houseNo").is(house.getHouseNo()))
+                    .apply(new Update().pull("requests", existingRequest.get()))
+                    .first();
+
             return true;
         }
         return false;
     }
+
 
     public boolean updateRequest(String requestNo, String status) {
         Optional<Request> existingRequest = requestRepository.findARequestByRequestNo(requestNo);
