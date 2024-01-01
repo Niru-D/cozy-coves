@@ -9,8 +9,6 @@
 import axios from 'axios';
 import { useAuthContext } from "@asgardeo/auth-react";
 
-const { getAccessToken } = useAuthContext();
-
 const api = axios.create({
     baseURL: window.config.axiosBaseUrl,
     headers: {
@@ -21,6 +19,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
     async config => {
+        const { getAccessToken } = useAuthContext();
         const token = await getAccessToken();
         config.headers.Authorization = `Bearer ${token}`;
         return config;
@@ -31,4 +30,5 @@ api.interceptors.request.use(
 );
 
 export default api;
+
 
