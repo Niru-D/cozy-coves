@@ -8,26 +8,27 @@
 
 import axios from 'axios';
 import { useAuthContext } from "@asgardeo/auth-react";
-import { useEffect } from 'react';
 
-const App = () => {
-    const { getAccessToken } = useAuthContext();
-    let axiosInstance;
+const { getAccessToken } = useAuthContext();
 
-    useEffect(() => {
-        getAccessToken().then((accessToken) => {
-            axiosInstance = axios.create({
-                baseURL: window.config.axiosBaseUrl,
-                headers: {
-                    "ngrok-skip-browser-warning": "true",
-                    "Authorization": "Bearer " + accessToken,
-                    "Content-Type": "Application/Json"
-                }
-            });
-        }).catch((error) => {
-            console.log(error);
-        });
-    }, []);
-}
+const api = axios.create({
+    baseURL: window.config.axiosBaseUrl,
+    headers: {
+        "ngrok-skip-browser-warning": "true",
+        "Content-Type": "Application/Json"
+    }
+});
 
-export default App;
+api.interceptors.request.use(
+    async config => {
+        const token = await getAccessToken();
+        config.headers.Authorization = `Bearer ${token}`;
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+export default api;
+
