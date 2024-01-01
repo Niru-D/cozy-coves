@@ -1,6 +1,5 @@
 import React from 'react';
 import './requestsRenter.css';
-import { MdPendingActions } from "react-icons/md";
 import { useAuthContext } from '@asgardeo/auth-react';
 import { useState, useEffect } from 'react';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
@@ -27,6 +26,10 @@ const DashboardContentRequests = () => {
 
   useEffect(() => {
     fetchRequests();
+
+    const interval = setInterval(fetchRequests, 500);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -37,9 +40,9 @@ const DashboardContentRequests = () => {
             {requests.map((request, index) => (
               <CustomCard
                 key={index}
+                requestNo={request.requestNo}
                 address={request.house.address.join(', ')}
                 owner={request.house.owner.username}
-                telephone={request.telephone}
                 status={request.status}
               />
             ))}

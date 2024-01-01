@@ -2,40 +2,71 @@ import React from 'react';
 // import './requestsRenter.css';
 import { MdPendingActions } from "react-icons/md";
 import { useAuthContext } from '@asgardeo/auth-react';
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
-import CustomCard from '../common/requestCard';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, SimpleGrid, Box } from '@chakra-ui/react'
+import CustomCard from './houseRequestsCard';
+import { useState, useEffect } from 'react';
+import './houseRequestsCard.css';
+import api from '../../../api/axiosConfig';
 
 const DashboardContentRequests = () => {
   const { state } = useAuthContext();
 
-  const cardValues = {
-    address: 'No.34, Sri Soratha Mawatha, Nugegoda.',
-    owner: 'Charith Basnayake',
-    telephone: '+94716623567',
-    status: 'Pending'
+  const [myhouses, setMyHouses] = useState();
+
+  const getMyHouses = async () => {
+    try {
+      const response = await api.get("/houses/search", {
+        params: {
+          ownerUsername: "shaninadee23@gmail.com",
+          houseState: "AVAILABLE",
+        }
+      });
+      const housesWithRequests = response.data.filter(house => 'requests' in house && house.requests && house.requests.length > 0);
+      setMyHouses(housesWithRequests);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+
+  useEffect(() => {
+    getMyHouses();
+
+    const interval = setInterval(getMyHouses, 500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="dashboard">
-      <p className='heading'>My Requests</p>
-      <Tabs variant='enclosed-colored' colorScheme='teal' size='md' align='center' isFitted className='tabs-section'>
-        <TabList>
-          <Tab>All</Tab>
-          <Tab>Pending</Tab>
-          <Tab>Responded</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-          <CustomCard {...cardValues} />
-          </TabPanel>
-          <TabPanel>
-            
-          </TabPanel>
-          <TabPanel>
-            
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+    <div className="owner-dashboard">
+      <p className='heading-requests'>House Requests</p>
+      <Box className='house-section' overflowY='auto' maxHeight='430px'
+              sx={{
+                  '&::-webkit-scrollbar': {
+                    display: 'none',
+                  },
+                  '-ms-overflow-style': 'none', 
+                  'scrollbar-width': 'none', 
+      }}>
+        <div  style={{ overflowY: 'auto' }}>
+        <SimpleGrid spacing={4} templateColumns='repeat(auto-fill, minmax(650px, 1fr))'>
+        {myhouses && myhouses.map((house, index) => (
+            <CustomCard
+              key={index}
+              houseNo={house.houseNo}
+              description={house.description}
+              price={house.price}
+              address={house.address}
+              rooms={house.no_of_rooms}
+              bathrooms={house.no_of_bathrooms} 
+            />
+          ))}
+
+        </SimpleGrid>
+
+        </div>
+      </Box>
+      
     </div>
   );
 };

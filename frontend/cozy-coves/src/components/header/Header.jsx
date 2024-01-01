@@ -11,7 +11,6 @@ const Header = () => {
       getBasicUserInfo()
         .then((userInfo) => {
           setUsername(userInfo.displayName);
-          console.error(userInfo);
         })
         .catch((error) => {
           console.error(error);

@@ -47,8 +47,6 @@ const DashboardContentHouses = () => {
           renterUsername: state.username
         }
       });
-      console.log("my houses");
-      console.log(response.data);
       setMyHouses(response.data);
     } catch (err) {
       console.log(err);
@@ -192,40 +190,16 @@ const DashboardContentHouses = () => {
                   <DrawerHeader className='drawer-header'>Filter Houses</DrawerHeader>
 
                   <DrawerBody className='drawer-body'>
-                  <form
-                    id='my-form'
-                    onSubmit={handleFormSubmit}
-                  >
-                
+                  <form id='my-form' onSubmit={handleFormSubmit}>
                     <FormControl>
+                      <FormLabel htmlFor="location-input" className='form-label'>Location</FormLabel>
+                      <Input type='text' id="location-input" className='inputs' onChange={handleInputChange} value={formValues.location || ''} name="location" />
 
-                      <FormLabel className='form-label'>Location</FormLabel>
-                      <Input
-                        type='text'
-                        className='inputs'
-                        onChange={handleInputChange}
-                        value={formValues.location || ''}
-                        name="location"
-                      />
+                      <FormLabel htmlFor="price-input" className='form-label'>Maximum Price LKR</FormLabel>
+                      <Input type='number' id="price-input" className='inputs' onChange={handleInputChange} value={formValues.price || ''} name="price" />
 
-                      <FormLabel className='form-label'>Maximum Price LKR</FormLabel>
-                      <Input
-                        type='number'
-                        className='inputs'
-                        onChange={handleInputChange}
-                        value={formValues.price || ''}
-                        name="price"
-                      />
-
-                      <FormLabel className='form-label'>No of rooms</FormLabel>
-                      <NumberInput
-                        max={20}
-                        min={0}
-                        className='inputs'
-                        onChange={handleNumberInputChange("rooms")}
-                        value={formValues.rooms || 0}
-                        name="rooms"
-                      >
+                      <FormLabel htmlFor="rooms-input" className='form-label'>No of rooms</FormLabel>
+                      <NumberInput max={20} min={0} id="rooms-input" className='inputs' onChange={handleNumberInputChange("rooms")} value={formValues.rooms || 0} name="rooms">
                         <NumberInputField />
                         <NumberInputStepper>
                           <NumberIncrementStepper />
@@ -233,15 +207,8 @@ const DashboardContentHouses = () => {
                         </NumberInputStepper>
                       </NumberInput>
 
-                      <FormLabel className='form-label'>No of bathrooms</FormLabel>
-                      <NumberInput
-                        max={20}
-                        min={0}
-                        className='inputs'
-                        onChange={handleNumberInputChange("bathrooms")}
-                        value={formValues.bathrooms || 0}
-                        name="bathrooms"
-                      >
+                      <FormLabel htmlFor="bathrooms-input" className='form-label'>No of bathrooms</FormLabel>
+                      <NumberInput max={20} min={0} id="bathrooms-input" className='inputs' onChange={handleNumberInputChange("bathrooms")} value={formValues.bathrooms || 0} name="bathrooms">
                         <NumberInputField />
                         <NumberInputStepper>
                           <NumberIncrementStepper />
@@ -249,8 +216,9 @@ const DashboardContentHouses = () => {
                         </NumberInputStepper>
                       </NumberInput>
                     </FormControl>
-
                   </form>
+
+
                   </DrawerBody>
 
                   <DrawerFooter>
@@ -300,6 +268,7 @@ const DashboardContentHouses = () => {
                             rooms={house.no_of_rooms}
                             bathrooms={house.no_of_bathrooms}
                             houseState={house.state}
+                            btnVisibility={true}
                           />
                         ))
                       ) : (
@@ -313,6 +282,7 @@ const DashboardContentHouses = () => {
                               rooms={house.no_of_rooms}
                               bathrooms={house.no_of_bathrooms}
                               houseState={house.state}
+                              btnVisibility={true}
                             />
                           ))
                         )}
@@ -348,6 +318,7 @@ const DashboardContentHouses = () => {
                                 rooms={house.no_of_rooms}
                                 bathrooms={house.no_of_bathrooms}
                                 houseState={house.state}
+                                btnVisibility={false}
                               />
                             ))
                       }

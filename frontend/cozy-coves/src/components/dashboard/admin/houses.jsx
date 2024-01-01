@@ -34,7 +34,7 @@ const DashboardContentHouses = () => {
   const getHouses = async () =>{
     try{
       const response = await api.get("/houses");
-      console.log(response.data);
+      
       setHouses(response.data);
 
       const totalHouses = response.data.length || 0;
@@ -51,14 +51,6 @@ const DashboardContentHouses = () => {
       console.log(err);
     }
   }
-
-  // useEffect(() => {
-  //   getHouses();
-
-  //   const interval = setInterval(getHouses, 500);
-
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const initialFormValues = {
     state: '',
@@ -96,28 +88,12 @@ const DashboardContentHouses = () => {
     return Object.values(formValues).some((value) => typeof value === 'string' && value.trim() !== '');
   };
 
-  // const handleFormSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log('submitted');
-  //   if (!appliedChanges && formChanges) {
-  //     setAppliedChanges(true);
-  //     setShowTag(true);
-  //   }
-  //   onDrawerClose();
-  // };
-
   const handleCloseTag = () => {
     setFormValues({ ...initialFormValues });
     setAppliedChanges(false);
     setShowTag(false);
-    setTempHouses([]); // Clear temporary array
+    setTempHouses([]); 
   };
-
-  // const handleResetChanges = () => {
-  //   setFormValues({ ...initialFormValues });
-  //   setAppliedChanges(false);
-  //   setShowTag(false);
-  // };
 
   const handleSearchHouses = async () => {
     try {
@@ -131,7 +107,7 @@ const DashboardContentHouses = () => {
         },
       });
       console.log(response.data);
-      setTempHouses(response.data || []); // Update temporary array with filtered houses
+      setTempHouses(response.data || []);
     } catch (err) {
       console.log(err);
     }
@@ -151,9 +127,9 @@ const DashboardContentHouses = () => {
     if (!appliedChanges && formChanges) {
       setAppliedChanges(true);
       setShowTag(true);
-      await handleSearchHouses(); // Call the search API with form values
+      await handleSearchHouses(); 
     } else {
-      await getHouses(); // Call the default /houses API
+      await getHouses(); 
     }
     onDrawerClose();
   };
@@ -162,7 +138,7 @@ const DashboardContentHouses = () => {
     setFormValues({ ...initialFormValues });
     setAppliedChanges(false);
     setShowTag(false);
-    setTempHouses([]); // Clear temporary array
+    setTempHouses([]); 
     onDrawerClose();
   };
 
@@ -246,53 +222,24 @@ const DashboardContentHouses = () => {
                   <DrawerHeader className='drawer-header'>Filter Houses</DrawerHeader>
 
                   <DrawerBody className='drawer-body'>
-                  <form
-                    id='my-form'
-                    onSubmit={handleFormSubmit}
-                  >
-                
+                  <form id='my-form' onSubmit={handleFormSubmit}>
                     <FormControl>
-                      <FormLabel className='form-label'>State</FormLabel>
-                      <Select
-                        placeholder='Select the state'
-                        className='inputs'
-                        onChange={handleInputChange}
-                        value={formValues.state || ''}
-                        name="state"
-                      >
+                      <FormLabel htmlFor="state-select" className='form-label'>State</FormLabel>
+                      <Select id="state-select" placeholder='Select the state' className='inputs' onChange={handleInputChange} value={formValues.state || ''} name="state">
                         <option>Available</option>
                         <option>Rented</option>
                         <option>Renovating</option>
                         <option>Suspended</option>
                       </Select>
 
-                      <FormLabel className='form-label'>Location</FormLabel>
-                      <Input
-                        type='text'
-                        className='inputs'
-                        onChange={handleInputChange}
-                        value={formValues.location || ''}
-                        name="location"
-                      />
+                      <FormLabel htmlFor="location-input" className='form-label'>Location</FormLabel>
+                      <Input type='text' id="location-input" className='inputs' onChange={handleInputChange} value={formValues.location || ''} name="location" />
 
-                      <FormLabel className='form-label'>Maximum Price LKR</FormLabel>
-                      <Input
-                        type='number'
-                        className='inputs'
-                        onChange={handleInputChange}
-                        value={formValues.price || ''}
-                        name="price"
-                      />
+                      <FormLabel htmlFor="price-input" className='form-label'>Maximum Price LKR</FormLabel>
+                      <Input type='number' id="price-input" className='inputs' onChange={handleInputChange} value={formValues.price || ''} name="price" />
 
-                      <FormLabel className='form-label'>No of rooms</FormLabel>
-                      <NumberInput
-                        max={20}
-                        min={0}
-                        className='inputs'
-                        onChange={handleNumberInputChange("rooms")}
-                        value={formValues.rooms || 0}
-                        name="rooms"
-                      >
+                      <FormLabel htmlFor="rooms-input" className='form-label'>No of rooms</FormLabel>
+                      <NumberInput max={20} min={0} id="rooms-input" className='inputs' onChange={handleNumberInputChange("rooms")} value={formValues.rooms || 0} name="rooms">
                         <NumberInputField />
                         <NumberInputStepper>
                           <NumberIncrementStepper />
@@ -300,15 +247,8 @@ const DashboardContentHouses = () => {
                         </NumberInputStepper>
                       </NumberInput>
 
-                      <FormLabel className='form-label'>No of bathrooms</FormLabel>
-                      <NumberInput
-                        max={20}
-                        min={0}
-                        className='inputs'
-                        onChange={handleNumberInputChange("bathrooms")}
-                        value={formValues.bathrooms || 0}
-                        name="bathrooms"
-                      >
+                      <FormLabel htmlFor="bathrooms-input" className='form-label'>No of bathrooms</FormLabel>
+                      <NumberInput max={20} min={0} id="bathrooms-input" className='inputs' onChange={handleNumberInputChange("bathrooms")} value={formValues.bathrooms || 0} name="bathrooms">
                         <NumberInputField />
                         <NumberInputStepper>
                           <NumberIncrementStepper />
@@ -316,8 +256,8 @@ const DashboardContentHouses = () => {
                         </NumberInputStepper>
                       </NumberInput>
                     </FormControl>
-
                   </form>
+
                   </DrawerBody>
 
                   <DrawerFooter>
@@ -367,6 +307,7 @@ const DashboardContentHouses = () => {
                             rooms={house.no_of_rooms}
                             bathrooms={house.no_of_bathrooms}
                             houseState={house.state}
+                            btnVisibility={true}
                           />
                         ))
                       ) : (
@@ -380,6 +321,7 @@ const DashboardContentHouses = () => {
                               rooms={house.no_of_rooms}
                               bathrooms={house.no_of_bathrooms}
                               houseState={house.state}
+                              btnVisibility={true}
                             />
                           ))
                         )}

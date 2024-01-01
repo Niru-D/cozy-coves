@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import api from '../../../api/axiosConfig';
 import './houseCard.css';
 
-const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, houseState }) => {
+const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, houseState, btnVisibility }) => {
 
   const { isOpen: isOpen1, onOpen: onOpen1, onClose: onClose1 } = useDisclosure()
   const { isOpen: isOpen2, onOpen: onOpen2, onClose: onClose2 } = useDisclosure()
@@ -62,12 +62,13 @@ const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, hou
   const checkExistingRequests = async () => {
     try {
       const response = await api.get(`/requests/search?username=${state.username}&houseNo=${houseNo}`);
-      return response.data.length > 0; 
+      return response.data ? response.data.length > 0 : false; 
     } catch (error) {
       console.error('Error checking existing requests', error);
       return false;
     }
   };
+  
   
 
   useEffect(() => {
@@ -106,6 +107,7 @@ const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, hou
         variant='outline'
         height={{ base: '200px', md: '280px' }}
         margin='10px'
+        className='house-card'
         >
         <Flex direction={{ base: 'column', sm: 'row' }} gap='1rem'>
             <Image
@@ -152,14 +154,14 @@ const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, hou
                         </Box>
                     </Flex>
                     
-                    {(userRole === 'Admin') && (
+                    {(userRole === 'Admin' && btnVisibility !==false) && (
                       <Flex justify='flex-start' position='absolute' bottom='15px' w='100%'>
                         <p className={`house-state ${houseState.toLowerCase()}`}>{houseState}</p>
                       </Flex>
 
                     )}
 
-                    {(userRole === 'Admin' && houseState !== 'SUSPENDED' && houseState !== 'RENTED') && (
+                    {(userRole === 'Admin' && houseState !== 'SUSPENDED' && houseState !== 'RENTED' && btnVisibility !==false) && (
                       <Flex justify='flex-end' position='absolute' bottom='15px' right='15px' w='100%'>
                           <Button className='suspend-btn' onClick={onOpen1} colorScheme='black' variant='outline' leftIcon={<MdAdminPanelSettings />}>
                               Suspend
@@ -191,7 +193,7 @@ const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, hou
                           </AlertDialog>
                       </Flex>
                     )}
-                    {(userRole === 'Admin' && houseState === 'SUSPENDED') && (
+                    {(userRole === 'Admin' && houseState === 'SUSPENDED' && btnVisibility !==false) && (
                       <Flex justify='flex-end' position='absolute' bottom='15px' right='15px' w='100%'>
                           <Button className='resume-btn' onClick={onOpen1} colorScheme='green' variant='outline' leftIcon={<MdAdminPanelSettings />}>
                               Resume
@@ -224,7 +226,7 @@ const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, hou
                       </Flex>
                     )}
 
-                    {(userRole === 'Renter') && (
+                    {(userRole === 'Renter' && btnVisibility !==false) && (
                       <Flex justify='flex-end' position='absolute' bottom='15px' right='15px' w='100%'>
                       <Button className='suspend-btn' onClick={onOpen1} colorScheme='orange' variant='outline' leftIcon={<TbMessageCheck />} isDisabled={requestMade} borderColor={requestMade ? 'white' : 'orange'}>
                           {requestMade ? 'Requested' : 'Request to rent'}

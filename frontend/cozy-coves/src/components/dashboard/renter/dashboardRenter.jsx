@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import DashboardContentHouses from './housesRenter';
 import DashboardContentRequests from './requestsRenter';
 import NavBar from '../../navBar/navBar';
@@ -6,13 +6,13 @@ import NavBar from '../../navBar/navBar';
 const DashboardRenter = () => {
   const [activeComponent, setActiveComponent] = useState(null);
 
-  const handleIconClick = (index) => {
+  const handleIconClick = useCallback((index) => {
     if (index === 0) {
       setActiveComponent(<DashboardContentHouses />);
     } else if (index === 1) {
       setActiveComponent(<DashboardContentRequests />);
     }
-  };
+  }, []);
 
   return (
     <div className="dashboard">
@@ -25,4 +25,3 @@ const DashboardRenter = () => {
 };
 
 export default DashboardRenter;
-

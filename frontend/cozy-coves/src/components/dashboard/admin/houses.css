@@ -75,5 +75,14 @@ ul{
     color: rgb(73, 73, 73);
 }
 
+.add-icon{
+    position: absolute;
+    right: 30px;
+    font-size: 25px;
+}
+
+.add-icon:hover{
+    cursor: pointer;
+}
   
   
