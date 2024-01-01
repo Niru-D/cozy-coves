@@ -9,6 +9,14 @@
 import axios from 'axios';
 import { useAuthContext } from "@asgardeo/auth-react";
 
+// Custom hook to get access token
+export function useGetToken() {
+  const { getAccessToken } = useAuthContext();
+  return async function getToken() {
+    return await getAccessToken();
+  };
+}
+
 const api = axios.create({
     baseURL: window.config.axiosBaseUrl,
     headers: {
@@ -19,8 +27,8 @@ const api = axios.create({
 
 api.interceptors.request.use(
     async config => {
-        const { getAccessToken } = useAuthContext();
-        const token = await getAccessToken();
+        const getToken = useGetToken();
+        const token = await getToken();
         config.headers.Authorization = `Bearer ${token}`;
         return config;
     },
@@ -30,5 +38,6 @@ api.interceptors.request.use(
 );
 
 export default api;
+
 
 
