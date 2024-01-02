@@ -31,9 +31,15 @@ const DashboardContentHouses = () => {
     rented: 0,
   });
 
+  const { getAccessToken } = useAuthContext();
+
   const getHouses = async () =>{
     try{
-      const response = await api.get("/houses");
+      // const response = await api.get("/houses");
+      const token = await getAccessToken();
+      const response = await api.get("/houses", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       
       setHouses(response.data);
 
