@@ -35,11 +35,11 @@ const DashboardContentHouses = () => {
 
   const getHouses = async () =>{
     try{
-      // const response = await api.get("/houses");
-      const token = await getAccessToken();
-      const response = await api.get("/houses", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get("/houses");
+      // const token = await getAccessToken();
+      // const response = await api.get("/houses", {
+      //   headers: { Authorization: `Bearer ${token}` }
+      // });
       console.log("Get houses response");
       console.log(response.data); 
       console.log("Get houses response end");
