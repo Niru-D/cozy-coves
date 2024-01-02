@@ -40,7 +40,9 @@ const DashboardContentHouses = () => {
       const response = await api.get("/houses", {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log("Get houses response");
       console.log(response.data); 
+      console.log("Get houses response end");
       setHouses(response.data);
 
       const totalHouses = response.data.length || 0;
