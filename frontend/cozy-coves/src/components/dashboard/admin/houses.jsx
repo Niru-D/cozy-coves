@@ -107,7 +107,7 @@ const DashboardContentHouses = () => {
     try {
       const response = await api.get("/houses/search", {
         params: {
-          state: formValues.state || undefined,
+          houseState: formValues.state || undefined,
           location: formValues.location || undefined,
           maxPrice: formValues.price || undefined,
           rooms: formValues.rooms || undefined,

@@ -116,7 +116,7 @@ const HouseCard = ({ houseNo, description, price, address, rooms, bathrooms, hou
                 minW={{ md: '200px' }}
                 boxAspectRatio={1}
                 src='src\assets\home5.jpeg'
-                alt='Caffe Latte'
+                alt='House Image'
                 />
                     <Flex
                         direction='column'
